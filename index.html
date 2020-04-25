@@ -1,0 +1,200 @@
+<html>
+<head>
+<style>	
+	h1 {
+		color: #7157ff;
+	}
+
+	hr {
+		display: block;
+		border: 0;
+		border-top: 3px solid #f90;
+		padding: 0; 
+	}
+	
+	textarea {
+		width: 70%;
+	}
+	
+	#div_main {
+		font-family: Sans-serif;
+		margin: auto;
+		margin-top: 30px;
+		width: 500px;
+	}
+	
+	#div_left {
+		width: 150px;
+		display: inline-block;
+		float: left;
+	}
+	
+	#div_left p {
+		margin-bottom: 30px;
+	}
+	
+	#div_right {
+		width: 350px;
+		display: inline-block;
+		float: right;
+	}
+	
+	#div_right p {
+		margin-bottom: 30px;
+	}
+
+	.clear {
+		clear: both;
+	}
+
+	#txtDescription {
+		margin-top: 15px;
+	}
+
+	#status {
+		margin-top:10px;
+		font-size: 12px;
+	}
+
+	#btnSubmit {
+		margin: 20px 0 10px 0;
+	}
+    #divMessage {
+        color: red;
+		line-height: 30px;
+    }
+
+	.blankInput {
+		background-color: yellow;
+	}
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+
+$(function() {
+
+	$("#btnSubmit").on("click", function() {
+			//Removes all errors
+			$("#divMessage").html("");
+            var txtVal = $("#textTitle").val();
+            if (txtVal == "") {
+                event.preventDefault();
+				$("#textTitle").addClass('blankInput');
+                $("#divMessage").html('Name of Electronics Item is required. <br>');
+            } else if (txtVal != "") {
+				$("#textTitle").removeClass('blankInput')
+			}
+
+			//  Brand validation
+            var brand = $("#txtBrandName").val();
+			if (brand == "") {
+				event.preventDefault();
+				$("#txtBrandName").addClass('blankInput');
+                document.querySelector("#divMessage").innerHTML += "Please input the brand name" + "<br>";
+			} else if (brand != "") {
+				$("#txtBrandName").removeClass('blankInput')
+			}
+
+			// Type validation
+            var x = $("#selectType").val();
+			var typeVal = x.toLowerCase();
+            var a = $("#tvOption").text();
+			var b = $("#airconOption").text();
+			var c = $("#kitchenOption").text();
+			var d = $("#lightingOption").text();
+            // console.log(typeVal);
+            if (typeVal == "") {
+                event.preventDefault();
+            	document.querySelector("#divMessage").innerHTML += "Type of Electronics Item is required." + "<br>";	
+            } 
+			if (a !== "TV" || b !== "Aircon" || c !== "Kitchen" || d !== "Lighting") {
+                event.preventDefault();
+                document.querySelector("#divMessage").innerHTML += "Type of Electronics Item is invalid." + "<br>";	
+			}
+			// Installation check - radio button validation
+            if (document.querySelector("#install_Yes").checked == false &&
+            document.querySelector("#install_No").checked == false) {
+                event.preventDefault();
+                document.querySelector("#divMessage").innerHTML += "No installation selected." + "<br>";
+            }
+			// Price validation
+            var price = $("#txtPrice").val();
+            if (price == "" || price == NaN || price == 0) {
+                event.preventDefault();
+				$("#txtPrice").addClass("blankInput");
+                document.querySelector("#divMessage").innerHTML += "Please input a price" + "<br>";
+            } else if (price != "") {
+				$("#txtPrice").removeClass("blankInput")
+			}
+			// Description validation
+			var desc = $("#txtDescription").val();
+			if (desc == "") {
+				event.preventDefault();
+				$("#txtDescription").addClass('blankInput');
+                document.querySelector("#divMessage").innerHTML += "Please put a description" + "<br>";
+			} 
+        });
+		// Character Count
+		var count = 0;
+		var textBox = $("#txtDescription");	
+		var status = $("#status");
+		status.text(count+ " characters")
+		textBox.keyup(function() {
+			var characters = $(this).val().length;
+			status.text(characters+ " characters.");
+			
+			if (textBox != "") {
+				$("#txtDescription").removeClass('blankInput');
+			}
+		})
+});
+    
+</script>
+</head>
+<body>
+<div id="div_main">
+	<h1>
+		Add Electronics Product
+	</h1>
+	<hr>
+	<form action="../JS_Assignment 2/process.html" method="POST">
+	<div id="div_left">
+		<p>Name:</p>
+		<p>Type:</p>
+		<p>Brand:</p>
+		<p>Installation:</p>
+		<p>Price ($):</p>
+	</div>
+	<div id="div_right">
+		<p><input type="text" id="textTitle" name="txtProductName"></p>
+		<p>
+		<select id="selectType">
+			<option value=""> Select a Type</option>
+			<option value="tv" class="options" id="tvOption">TV</option>
+			<option value="aircon" class="options" id="airconOption">Aircon</option>
+			<option value="kitchen" class="options" id="kitchenOption">Kitchen</option>
+			<option value="lighting" class="options" id="lightingOption">Lighting</option>
+		</select>
+		</p>
+		<p><input type="text" id="txtBrandName" name="txtBrandName"></p>
+		<p><input type="radio" id="install_Yes" name="install"><label for="install_Yes">Yes</label><input type="radio" id="install_No" name="install"><label for="install_No">No</label></p>
+		<!-- <p><input type="number" min="1" id="txtPrice" step=".01" name="txtPrice"></p> -->
+		<p><input type="number" step=.01 id="txtPrice" name="txtPrice"></p>
+		
+	</div>
+	<div class="clear"></div>
+	Description:
+	<br>
+	<textarea id="txtDescription" name="txtDescription"></textarea>
+	<br>
+	<span id="status"></span>
+	<br>
+	<input type="submit" id="btnSubmit">
+	</form>
+	<div id="divMessage" style="color:red;">
+	</div>
+</div>
+</body>
+</html>
